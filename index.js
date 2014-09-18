@@ -75,7 +75,7 @@ function put(request, response) {
 		if(userdata) {
 			var newSID = login.login(userdata.name, userdata.email);
 			response.setHeader('Set-Cookie', 'session_id=' + newSID);
-			response.end("Re-freshed session id! " + login.hello(newSID));
+			response.end("Re-freshed session id = " + login.hello(newSID));
 		}
 	}
 	else {

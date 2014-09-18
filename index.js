@@ -78,6 +78,9 @@ function put(request, response) {
     }
 	response.end("Re-freshed session id\n" +login.hello(newSID));
 	}
+	else {
+		response.end("Not logged in!");
+	}
 };
 
 app.listen(8000);

@@ -1,4 +1,3 @@
-
 /**
  * Login Class
  */
@@ -42,9 +41,11 @@ Login.prototype.login = function(_name, _email) {
  */ 
 Login.prototype.logout = function(sessionId) {
 	console.log('logout::' + sessionId);
-   /*
-	* TODO: Remove the given sessionId from the sessionMap
-	*/
+    if(this.isLoggedIn(sessionId)) {
+    var map = this.sessionMap[sessionId];
+    delete this.sessionMap[sessionId];
+    return map;
+    }
 };
 
 // Export the Login class

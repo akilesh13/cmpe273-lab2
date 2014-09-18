@@ -41,6 +41,13 @@ function post(request, response) {
 	// TODO: set new session id to the 'session_id' cookie in the response
 	// replace "Logged In" response with response.end(login.hello(newSessionId));
 
+    var name = request.body['name'];
+    var email = request.body['email'];
+    if(name && email) {
+    var newSessionId = login.login(name,email);
+    response.setHeader('Set-Cookie', 'session_id=' + newSessionId);
+    response.end(login.hello(newSessionId));
+    }
 	response.end("Logged In\n");
 };
 
@@ -48,17 +55,31 @@ function del(request, response) {
 	console.log("DELETE:: Logout from the server");
  	// TODO: remove session id via login.logout(xxx)
  	// No need to set session id in the response cookies since you just logged out!
-
-  	response.end('Logged out from the server\n');
+    
+    var cookies = request.cookies;
+    console.log(cookies);
+    if ('session_id' in cookies) {
+    login.logout(cookies['session_id']);
+    response.end('Logged out from the server\n');
+    }
 };
 
 function put(request, response) {
 	console.log("PUT:: Re-generate new seesion_id for the same user");
 	// TODO: refresh session id; similar to the post() function
 
-	response.end("Re-freshed session id\n");
+    var cookies = request.cookies;
+    if ('session_id' in cookies) {
+    var ses_id = cookies['session_id'];
+    var data = login.logout(ses_id);
+    if(data) {
+    var newSID = login.login(userdata.name, userdata.email);
+	response.setHeader('Set-Cookie', 'session_id=' + newSID);
+    }
+	response.end("Re-freshed session id\n" +login.hello(newSID));
+	}
 };
 
 app.listen(8000);
 
-console.log("Node.JS server running at 8000...");
+console.log("Node.JS server running at 8000...");	

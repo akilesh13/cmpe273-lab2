@@ -68,20 +68,21 @@ function put(request, response) {
 	console.log("PUT:: Re-generate new seesion_id for the same user");
 	// TODO: refresh session id; similar to the post() function
 
-    var cookies = request.cookies;
-    if ('session_id' in cookies) {
-    var ses_id = cookies['session_id'];
-    var data = login.logout(ses_id);
-    if(data) {
-    var newSID = login.login(userdata.name, userdata.email);
-	response.setHeader('Set-Cookie', 'session_id=' + newSID);
-    }
-	response.end("Re-freshed session id\n" +login.hello(newSID));
+	var cookies = request.cookies;
+	if ('session_id' in cookies) {
+		var sid = cookies['session_id'];
+		var userdata = login.logout(sid);
+		if(userdata) {
+			var newSID = login.login(userdata.name, userdata.email);
+			response.setHeader('Set-Cookie', 'session_id=' + newSID);
+			response.end("Re-freshed session id! " + login.hello(newSID));
+		}
 	}
 	else {
 		response.end("Not logged in!");
 	}
 };
+
 
 app.listen(8000);
 
